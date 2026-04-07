@@ -46,7 +46,6 @@ st.set_page_config(
 with st.sidebar:
     st.markdown("## CrimeNet")
     st.markdown("**CDR Forensics Platform**")
-    # st.markdown("*C3iHub, IIT Kanpur*")
     st.divider()
 
     uploaded = st.file_uploader("Upload CDR CSV", type=["csv"])

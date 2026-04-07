@@ -2,8 +2,6 @@
 
 > An open, explainable forensic analysis platform for criminal network detection, behavioral profiling, and investigative intelligence from Call Detail Records (CDRs).
 
-Developed for research demonstration at **C3iHub, IIT Kanpur** — Centre for Cybersecurity Systems and Networks.
-
 ---
 
 ## Overview
@@ -208,4 +206,4 @@ Research and educational use only. Not for commercial deployment.
 
 ---
 
-*Developed for C3iHub, IIT Kanpur — Digital Forensics & Cybercrime Investigation Research*
+*CrimeNet — Digital Forensics & Cybercrime Investigation Research*

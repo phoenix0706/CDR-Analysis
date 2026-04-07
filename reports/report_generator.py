@@ -142,7 +142,7 @@ def generate_report(
 
     # ── Header ────────────────────────────────────────────────────────────────
     story.append(Paragraph("CrimeNet — CDR Investigation Report", S["title"]))
-    story.append(Paragraph(f"Generated: {generated_at} | C3iHub Digital Forensics Research", S["subtitle"]))
+    story.append(Paragraph(f"Generated: {generated_at} | Digital Forensics Research", S["subtitle"]))
     story.append(HRFlowable(width="100%", thickness=1.5, color=BRAND_BLUE, spaceAfter=8))
 
     # ── Dataset Overview ──────────────────────────────────────────────────────
@@ -297,7 +297,7 @@ def generate_report(
     story.append(Paragraph(
         "This report is generated for research and investigative review purposes. "
         "All findings reference raw CDR records and should be verified before court submission. "
-        "CrimeNet — C3iHub, IIT Kanpur Digital Forensics Research.",
+        "CrimeNet — Digital Forensics Research.",
         ParagraphStyle("footer", parent=getSampleStyleSheet()["Normal"], fontSize=7, textColor=MID_GRAY),
     ))
 
