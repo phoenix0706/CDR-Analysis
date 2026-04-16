@@ -42,17 +42,34 @@ VICTIMS = ["7700001111", "7700002222", "7700003333", "7700004444"]
 BURNER_1 = "6600001111"   # active weeks 2–3, IMEI swap in week 3
 BURNER_2 = "6600002222"   # active weeks 2–4, IMEI swap in week 3
 
-ALL_NUMBERS = RINGLEADERS + INTERMEDIARIES + VICTIMS + [BURNER_1, BURNER_2]
+# Delhi masterminds — control the Karnataka ring from north India
+DELHI_MASTERMINDS = ["9911000001", "9911000002"]
 
-# Karnataka towers — ordered geographically for realistic movement
+ALL_NUMBERS = RINGLEADERS + INTERMEDIARIES + VICTIMS + [BURNER_1, BURNER_2] + DELHI_MASTERMINDS
+
+# Towers — Karnataka (operational) + Delhi/NCR (mastermind base)
 TOWERS = {
-    "KA-BLR-KORA": ("Bengaluru Koramangala",    12.9352, 77.6245),
-    "KA-BLR-WHIT": ("Bengaluru Whitefield",      12.9698, 77.7499),
-    "KA-BLR-BAND": ("Bengaluru Banaswadi",       13.0143, 77.6561),
-    "KA-BLR-ELEC": ("Bengaluru Electronics City",12.8418, 77.6604),
-    "KA-BLR-YESH": ("Bengaluru Yeshwanthpur",    13.0291, 77.5478),
-    "KA-MYS-CHMD": ("Mysuru Chamundipuram",      12.3051, 76.6552),
-    "KA-HUB-TOWN": ("Hubballi Old Town",         15.3647, 75.1240),
+    # Bengaluru cluster (meeting points — kept fixed for demo narrative)
+    "KA-BLR-KORA": ("Bengaluru Koramangala",     12.9352, 77.6245),
+    "KA-BLR-WHIT": ("Bengaluru Whitefield",       12.9698, 77.7499),
+    "KA-BLR-BAND": ("Bengaluru Banaswadi",        13.0143, 77.6561),
+    "KA-BLR-ELEC": ("Bengaluru Electronics City", 12.8418, 77.6604),
+    "KA-BLR-YESH": ("Bengaluru Yeshwanthpur",     13.0291, 77.5478),
+    # Diverse Karnataka locations — ringleader bases, roaming, escape routes
+    "KA-MYS-CHMD": ("Mysuru Chamundipuram",       12.3051, 76.6552),
+    "KA-HUB-TOWN": ("Hubballi Old Town",          15.3647, 75.1240),
+    "KA-MNG-HMPK": ("Mangaluru Hampankatta",      12.8698, 74.8431),
+    "KA-BLG-TILK": ("Belagavi Tilakwadi",         15.8497, 74.4977),
+    "KA-SHV-KUVM": ("Shivamogga Kuvempu Nagar",   13.9299, 75.5681),
+    "KA-TMK-GNDH": ("Tumakuru Gandhi Nagar",      13.3409, 77.1010),
+    "KA-KLB-ALND": ("Kalaburagi Aland Road",      17.3297, 76.8200),
+    "KA-UDU-MITR": ("Udupi MIT Road",             13.3409, 74.7421),
+    "KA-BAL-GNDH": ("Ballari Gandhi Nagar",       15.1394, 76.9214),
+    # Delhi/NCR — mastermind base of operations
+    "DL-NDL-CPNP": ("New Delhi Connaught Place",  28.6315, 77.2167),
+    "DL-NDL-ROHK": ("Delhi Rohini",               28.7041, 77.1025),
+    "DL-GGN-SC29": ("Gurugram Sector 29",         28.4595, 77.0266),
+    "DL-NDA-SC18": ("Noida Sector 18",            28.5700, 77.3219),
 }
 TOWER_LIST = list(TOWERS.items())
 
@@ -131,11 +148,17 @@ def _week1_setup(rng: random.Random) -> list:
     w1_start = START_DATE
     w1_end   = START_DATE + timedelta(days=6, hours=23, minutes=59)
 
+    # Ringleaders operate from different home bases across the state
+    rl_home = {
+        RINGLEADERS[0]: "KA-MNG-HMPK",   # Ringleader 1 — Mangaluru coast
+        RINGLEADERS[1]: "KA-BLG-TILK",   # Ringleader 2 — Belagavi northwest
+        RINGLEADERS[2]: "KA-BLR-YESH",   # Ringleader 3 — Bengaluru
+    }
     for _ in range(60):
         rl = rng.choice(RINGLEADERS)
         im = rng.choice(INTERMEDIARIES)
         dt = _rand_dt(w1_start, w1_end, rng)
-        tid, tinfo = _rand_tower(rng, "KA-BLR-YESH")
+        tid, tinfo = _rand_tower(rng, rl_home[rl])
         records.append(_make_record(0, rl, im, dt, rng.randint(60, 480), "Voice", tid, tinfo))
 
     # Intermediaries also talk among themselves
@@ -162,27 +185,29 @@ def _week2_burner_intro(rng: random.Random) -> list:
     w2_start = START_DATE + timedelta(days=7)
     w2_end   = START_DATE + timedelta(days=13, hours=23, minutes=59)
 
-    # Burner phones first appear
+    # Burner 1 originates from coastal Udupi (evasion — far from Bengaluru)
     for _ in range(20):
         dt = _rand_dt(BURNER_ACTIVATE, w2_end, rng)
         target = rng.choice(RINGLEADERS)
-        tid, tinfo = _rand_tower(rng, "KA-BLR-BAND")
+        tid, tinfo = _rand_tower(rng, "KA-UDU-MITR")
         records.append(_make_record(0, BURNER_1, target, dt, rng.randint(120, 600), "Voice", tid, tinfo))
 
+    # Burner 2 originates from Shivamogga (central — different region)
     for _ in range(18):
         dt = _rand_dt(BURNER_ACTIVATE, w2_end, rng)
         target = rng.choice(INTERMEDIARIES[:4])
-        tid, tinfo = _rand_tower(rng, "KA-BLR-BAND")
+        tid, tinfo = _rand_tower(rng, "KA-SHV-KUVM")
         records.append(_make_record(0, BURNER_2, target, dt, rng.randint(60, 400), "Voice", tid, tinfo))
 
-    # Ringleaders continue coordinating — call volume increases (pre-wave tension)
+    # Ringleaders travel toward Bengaluru — late-night coordination
     for _ in range(40):
         rl = rng.choice(RINGLEADERS)
         im = rng.choice(INTERMEDIARIES)
         dt = _rand_dt(w2_start, w2_end, rng)
-        # Favour late-night calls (21:00–02:00)
         dt = dt.replace(hour=rng.choice([21, 22, 23, 0, 1, 2]))
-        tid, tinfo = _rand_tower(rng, "KA-BLR-YESH")
+        # Mix of home base + Tumakuru corridor (en route to Bengaluru)
+        prefer = rng.choice(["KA-TMK-GNDH", "KA-BLR-YESH", "KA-SHV-KUVM"])
+        tid, tinfo = _rand_tower(rng, prefer)
         records.append(_make_record(0, rl, im, dt, rng.randint(60, 360), "Voice", tid, tinfo))
 
     return records
@@ -286,10 +311,10 @@ def _week4_wave2(rng: random.Random) -> list:
     # Fraud calls — more aggressive volume this time
     records += _wave_victim_calls(WAVE_2_DATE.replace(hour=9), rng)
 
-    # BURNER_2 continues — calls ringleader 2
+    # BURNER_2 moves north to Kalaburagi after wave (escape route)
     for _ in range(8):
         dt = _rand_dt(WAVE_2_DATE, WAVE_2_DATE + timedelta(days=4), rng)
-        tid, tinfo = _rand_tower(rng, "KA-MYS-CHMD")  # moved to Mysuru
+        tid, tinfo = _rand_tower(rng, "KA-KLB-ALND")
         records.append(_make_record(0, BURNER_2, RINGLEADERS[1], dt, rng.randint(90, 500), "Voice", tid, tinfo))
 
     return records
@@ -298,12 +323,13 @@ def _week4_wave2(rng: random.Random) -> list:
 def _ringleader_silence(rng: random.Random) -> list:
     """After day 27, ringleaders go dark — communication silence (evasion)."""
     records = []
-    # Only intermediaries talk among themselves — ringleaders silent
+    # Intermediaries scatter — Ballari and Kalaburagi (northeast/flight pattern)
     end = END_DATE
     for _ in range(20):
         a, b = rng.sample(INTERMEDIARIES, 2)
         dt = _rand_dt(RINGLEADER_SILENCE, end, rng)
-        tid, tinfo = _rand_tower(rng)
+        prefer = rng.choice(["KA-BAL-GNDH", "KA-KLB-ALND", "KA-HUB-TOWN"])
+        tid, tinfo = _rand_tower(rng, prefer)
         records.append(_make_record(0, a, b, dt, rng.randint(10, 120), "Voice", tid, tinfo))
 
     # Some panicked victim outbound calls (trying to report/call back)
@@ -313,6 +339,45 @@ def _ringleader_silence(rng: random.Random) -> list:
         dt = _rand_dt(RINGLEADER_SILENCE, end, rng)
         tid, tinfo = _rand_tower(rng)
         records.append(_make_record(0, victim, im, dt, rng.randint(5, 60), "Voice", tid, tinfo))
+
+    return records
+
+
+def _delhi_mastermind_calls(rng: random.Random) -> list:
+    """
+    Delhi masterminds give high-level orders to Karnataka ringleaders.
+    They call only the 3 ringleaders — never intermediaries or victims.
+    Operate exclusively from Delhi/NCR towers — clear geographic separation.
+    """
+    records = []
+    delhi_towers = ["DL-NDL-CPNP", "DL-NDL-ROHK", "DL-GGN-SC29", "DL-NDA-SC18"]
+
+    # Strategic calls before each fraud wave and at key moments
+    call_windows = [
+        (START_DATE,                           START_DATE + timedelta(days=3)),   # initial briefing
+        (WAVE_1_DATE - timedelta(days=3),      WAVE_1_DATE - timedelta(days=1)),  # pre-wave 1 order
+        (WAVE_2_DATE - timedelta(days=3),      WAVE_2_DATE - timedelta(days=1)),  # pre-wave 2 order
+        (RINGLEADER_SILENCE,                   END_DATE),                          # shutdown signal
+    ]
+
+    for w_start, w_end in call_windows:
+        for _ in range(rng.randint(4, 8)):
+            mastermind = rng.choice(DELHI_MASTERMINDS)
+            rl = rng.choice(RINGLEADERS)
+            dt = _rand_dt(w_start, w_end, rng)
+            # Always calls from Delhi tower
+            tid = rng.choice(delhi_towers)
+            tinfo = TOWERS[tid]
+            records.append(_make_record(0, mastermind, rl, dt, rng.randint(120, 900), "Voice", tid, tinfo))
+
+    # Occasional SMS — terse coded instructions
+    for _ in range(10):
+        mastermind = rng.choice(DELHI_MASTERMINDS)
+        rl = rng.choice(RINGLEADERS)
+        dt = _rand_dt(START_DATE, END_DATE, rng)
+        tid = rng.choice(delhi_towers)
+        tinfo = TOWERS[tid]
+        records.append(_make_record(0, mastermind, rl, dt, 0, "SMS", tid, tinfo))
 
     return records
 
@@ -328,6 +393,7 @@ def generate_demo_scenario(output_file: str = "data/sample/demo_fraud_ring.csv",
     all_records += _week3_wave1(rng)
     all_records += _week4_wave2(rng)
     all_records += _ringleader_silence(rng)
+    all_records += _delhi_mastermind_calls(rng)
 
     # Sort chronologically and assign SR
     all_records.sort(key=lambda r: r["Date"] + r["Time"])
@@ -348,9 +414,10 @@ def generate_demo_scenario(output_file: str = "data/sample/demo_fraud_ring.csv",
     print(f"  Total records     : {len(all_records)}")
     print(f"  Date range        : {all_records[0]['Date']} → {all_records[-1]['Date']}")
     print(f"\n  Cast of characters:")
-    print(f"    Ringleaders     : {RINGLEADERS}")
-    print(f"    Intermediaries  : {INTERMEDIARIES}")
-    print(f"    Victims         : {VICTIMS}")
+    print(f"    Delhi Masterminds: {DELHI_MASTERMINDS}")
+    print(f"    Ringleaders      : {RINGLEADERS}")
+    print(f"    Intermediaries   : {INTERMEDIARIES}")
+    print(f"    Victims          : {VICTIMS}")
     print(f"    Burner Phone 1  : {BURNER_1}  (IMEI swap on {BURNER_IMEI_SWAP.date()})")
     print(f"    Burner Phone 2  : {BURNER_2}  (IMEI swap on {BURNER_IMEI_SWAP.date()})")
     print(f"\n  Key events:")

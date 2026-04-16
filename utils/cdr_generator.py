@@ -29,42 +29,78 @@ from datetime import datetime, timedelta
 
 TOWERS = {
     "UP": [
-        ("UP-LKO-01", "Lucknow Hazratganj",      26.8467, 80.9462),
-        ("UP-LKO-02", "Lucknow Aliganj",          26.8827, 80.9371),
-        ("UP-KNP-01", "Kanpur Swaroop Nagar",     26.4499, 80.3319),
-        ("UP-KNP-02", "Kanpur Kidwai Nagar",      26.4674, 80.3496),
-        ("UP-VNS-01", "Varanasi Sigra",            25.3176, 82.9739),
-        ("UP-AGR-01", "Agra Sanjay Place",         27.1767, 78.0081),
-        ("UP-MRT-01", "Meerut Shastri Nagar",      28.9845, 77.7064),
-        ("UP-GZB-01", "Ghaziabad Indirapuram",     28.6412, 77.3688),
+        ("UP-LKO-01", "Lucknow Hazratganj",        26.8467, 80.9462),
+        ("UP-LKO-02", "Lucknow Aliganj",            26.8827, 80.9371),
+        ("UP-KNP-01", "Kanpur Swaroop Nagar",       26.4499, 80.3319),
+        ("UP-KNP-02", "Kanpur Kidwai Nagar",        26.4674, 80.3496),
+        ("UP-VNS-01", "Varanasi Sigra",              25.3176, 82.9739),
+        ("UP-AGR-01", "Agra Sanjay Place",           27.1767, 78.0081),
+        ("UP-MRT-01", "Meerut Shastri Nagar",        28.9845, 77.7064),
+        ("UP-GZB-01", "Ghaziabad Indirapuram",       28.6412, 77.3688),
+        ("UP-PYG-01", "Prayagraj Civil Lines",       25.4358, 81.8463),
+        ("UP-ALG-01", "Aligarh Ramghat Road",        27.8974, 78.0880),
     ],
     "MH": [
-        ("MH-MUM-01", "Mumbai Bandra",             19.0596, 72.8295),
-        ("MH-MUM-02", "Mumbai Andheri",            19.1136, 72.8697),
-        ("MH-MUM-03", "Mumbai Thane",              19.2183, 72.9781),
-        ("MH-PUN-01", "Pune Koregaon Park",        18.5362, 73.8944),
-        ("MH-NGP-01", "Nagpur Civil Lines",        21.1458, 79.0882),
-        ("MH-NSK-01", "Nashik CBS",                19.9975, 73.7898),
+        ("MH-MUM-01", "Mumbai Bandra",               19.0596, 72.8295),
+        ("MH-MUM-02", "Mumbai Andheri",              19.1136, 72.8697),
+        ("MH-MUM-03", "Mumbai Thane",                19.2183, 72.9781),
+        ("MH-PUN-01", "Pune Koregaon Park",          18.5362, 73.8944),
+        ("MH-NGP-01", "Nagpur Civil Lines",          21.1458, 79.0882),
+        ("MH-NSK-01", "Nashik CBS",                  19.9975, 73.7898),
+        ("MH-AUR-01", "Aurangabad Cantonment",       19.8762, 75.3433),
+        ("MH-KLH-01", "Kolhapur Rajaram Road",       16.7050, 74.2433),
     ],
     "DL": [
-        ("DL-NDL-01", "New Delhi Connaught Place", 28.6315, 77.2167),
-        ("DL-NDL-02", "Delhi Rohini",              28.7041, 77.1025),
-        ("DL-NDL-03", "Delhi Dwarka",              28.5921, 77.0460),
-        ("DL-NDL-04", "Delhi Laxmi Nagar",         28.6317, 77.2767),
-        ("DL-GGN-01", "Gurugram Sector 29",        28.4595, 77.0266),
-        ("DL-NDA-01", "Noida Sector 18",           28.5700, 77.3219),
+        ("DL-NDL-01", "New Delhi Connaught Place",   28.6315, 77.2167),
+        ("DL-NDL-02", "Delhi Rohini",                28.7041, 77.1025),
+        ("DL-NDL-03", "Delhi Dwarka",                28.5921, 77.0460),
+        ("DL-NDL-04", "Delhi Laxmi Nagar",           28.6317, 77.2767),
+        ("DL-GGN-01", "Gurugram Sector 29",          28.4595, 77.0266),
+        ("DL-NDA-01", "Noida Sector 18",             28.5700, 77.3219),
+        ("DL-FBD-01", "Faridabad Sector 15",         28.4089, 77.3178),
+        ("DL-GZB-01", "Ghaziabad Raj Nagar",         28.6692, 77.4538),
+    ],
+    "RJ": [
+        ("RJ-JPR-01", "Jaipur Malviya Nagar",        26.8505, 75.8000),
+        ("RJ-JPR-02", "Jaipur Vaishali Nagar",       26.9124, 75.7318),
+        ("RJ-JDH-01", "Jodhpur Shastri Nagar",       26.2389, 73.0243),
+        ("RJ-UDR-01", "Udaipur Hiran Magri",         24.5854, 73.7125),
+        ("RJ-AJM-01", "Ajmer Vaishali Nagar",        26.4499, 74.6399),
+        ("RJ-KOT-01", "Kota Industrial Area",        25.1802, 75.8389),
+        ("RJ-BKN-01", "Bikaner Ganga Shahar",        28.0229, 73.3119),
+        ("RJ-ALW-01", "Alwar Model Town",            27.5534, 76.6346),
+    ],
+    "PB": [
+        ("PB-LDH-01", "Ludhiana Model Town",         30.9010, 75.8573),
+        ("PB-LDH-02", "Ludhiana Sarabha Nagar",      30.8801, 75.8245),
+        ("PB-AMR-01", "Amritsar Hall Bazar",         31.6340, 74.8723),
+        ("PB-JLN-01", "Jalandhar Civil Lines",       31.3260, 75.5762),
+        ("PB-PTL-01", "Patiala Leela Bhawan",        30.3398, 76.3869),
+        ("PB-BHT-01", "Bathinda Thermal Plant Road", 30.2110, 74.9455),
     ],
     "KA": [
         ("KA-BLR-01", "Bengaluru Koramangala",     12.9352, 77.6245),
         ("KA-BLR-02", "Bengaluru Whitefield",      12.9698, 77.7499),
+        ("KA-BLR-03", "Bengaluru Hebbal",          13.0450, 77.5950),
         ("KA-MYS-01", "Mysuru Chamundipuram",      12.3051, 76.6552),
         ("KA-HUB-01", "Hubballi Old Town",         15.3647, 75.1240),
+        ("KA-MNG-01", "Mangaluru Hampankatta",     12.8698, 74.8431),
+        ("KA-BLG-01", "Belagavi Tilakwadi",        15.8497, 74.4977),
+        ("KA-SHV-01", "Shivamogga Kuvempu Nagar", 13.9299, 75.5681),
+        ("KA-TMK-01", "Tumakuru Gandhi Nagar",     13.3409, 77.1010),
+        ("KA-KLB-01", "Kalaburagi Aland Road",     17.3297, 76.8200),
+        ("KA-UDU-01", "Udupi MIT Road",            13.3409, 74.7421),
+        ("KA-BAL-01", "Ballari Gandhi Nagar",      15.1394, 76.9214),
     ],
     "TN": [
         ("TN-CHN-01", "Chennai T. Nagar",          13.0418, 80.2341),
         ("TN-CHN-02", "Chennai Anna Nagar",        13.0850, 80.2101),
         ("TN-CHN-03", "Chennai Velachery",         12.9815, 80.2180),
         ("TN-CBE-01", "Coimbatore RS Puram",       11.0064, 76.9620),
+        ("TN-MDU-01", "Madurai Goripalayam",        9.9252, 78.1198),
+        ("TN-TRV-01", "Tiruchirappalli Cantonment",10.8050, 78.6856),
+        ("TN-SLM-01", "Salem Fairlands",           11.6643, 78.1460),
+        ("TN-VEL-01", "Vellore Katpadi",           12.9165, 79.1325),
     ],
 }
 
@@ -177,7 +213,11 @@ def generate_cdr(
 
     start_dt = datetime.strptime(start_date, "%Y-%m-%d")
     end_dt   = datetime.strptime(end_date,   "%Y-%m-%d")
-    towers   = TOWERS.get(state, TOWERS["UP"])
+    # ALL = pan-India dataset pulling from every state's towers
+    if state == "ALL":
+        towers = [t for state_towers in TOWERS.values() for t in state_towers]
+    else:
+        towers = TOWERS.get(state, TOWERS["UP"])
 
     # Build phone pool
     phones = [gen_phone() for _ in range(num_nodes)]
@@ -198,13 +238,21 @@ def generate_cdr(
         for p in phones
     }
 
+    # Assign each phone a primary home tower — 65% of calls from home, 35% roaming
+    # This ensures different numbers cluster around different locations on the map
+    phone_home_tower = {p: random.choice(towers) for p in phones}
+
     records = []
     for _ in range(num_records):
         caller, callee = pick_caller_callee(phones, scenario, num_nodes)
         dt        = rand_datetime(start_dt, end_dt)
         call_type = random.choice(CALL_TYPES)
         duration  = duration_for_type(call_type)
-        tower     = random.choice(towers)
+        # 65% chance: use caller's home tower; 35% chance: random roaming tower
+        if random.random() < 0.65:
+            tower = phone_home_tower[caller]
+        else:
+            tower = random.choice(towers)
 
         records.append({
             "SR":              len(records) + 1,
@@ -281,7 +329,7 @@ Examples:
     parser.add_argument("--start",    type=str,   default="2024-01-01",     help="Start date YYYY-MM-DD (default: 2024-01-01)")
     parser.add_argument("--end",      type=str,   default="2024-03-31",     help="End date YYYY-MM-DD (default: 2024-03-31)")
     parser.add_argument("--scenario", type=str,   default="random",         choices=["random", "gang", "fraud", "burner"], help="Investigation scenario")
-    parser.add_argument("--state",    type=str,   default="UP",             choices=["UP", "MH", "DL", "KA", "TN"],       help="Indian state for cell towers")
+    parser.add_argument("--state",    type=str,   default="UP",             choices=["UP", "MH", "DL", "KA", "TN", "RJ", "PB", "ALL"], help="Indian state for cell towers (ALL = pan-India)")
     parser.add_argument("--output",   type=str,   default="fake_cdr_data.csv", help="Output CSV filename")
     parser.add_argument("--seed",     type=int,   default=None,             help="Random seed for reproducibility")
 

@@ -16,6 +16,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from pyvis.network import Network
+from streamlit_folium import st_folium
 
 # Ensure project root is on the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -313,28 +314,47 @@ with tab_geo:
         all_numbers = sorted(pd.concat([df["Calling_Number"], df["Called_Number"]]).unique())
         track_number = st.selectbox("Track movement for number:", ["— None —"] + list(all_numbers))
 
+        # Filter trajectory for the selected number
         traj_df = None
         if track_number != "— None —":
             traj_df = get_movement_trajectory(df, track_number)
 
+        # Filter co-location events to only those involving the selected number
+        if track_number != "— None —" and not colocation_df.empty:
+            filtered_coloc = colocation_df[
+                (colocation_df["phone_a"] == track_number) |
+                (colocation_df["phone_b"] == track_number)
+            ]
+        else:
+            filtered_coloc = colocation_df
+
         folium_map = build_map(
             df,
-            colocation_df=colocation_df if not colocation_df.empty else None,
+            colocation_df=filtered_coloc if not filtered_coloc.empty else None,
             track_number=track_number if track_number != "— None —" else None,
             trajectory_df=traj_df,
         )
 
-        import streamlit.components.v1 as components
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".html", mode="w") as tmp_map:
-            folium_map.save(tmp_map.name)
-            map_html = open(tmp_map.name).read()
-        components.html(map_html, height=520)
+        st_folium(
+            folium_map,
+            width="100%",
+            height=520,
+            key=f"geo_map_{track_number}",
+            returned_objects=[],
+        )
 
-        if not colocation_df.empty:
-            st.subheader(f"Co-location Events (window: {colocation_window} min)")
-            st.dataframe(colocation_df.head(20), use_container_width=True, hide_index=True)
+        if track_number != "— None —":
+            if not filtered_coloc.empty:
+                st.subheader(f"Co-location Events for {track_number} (window: {colocation_window} min)")
+                st.dataframe(filtered_coloc, use_container_width=True, hide_index=True)
+            else:
+                st.info(f"No co-location events found for {track_number} within the configured time window.")
         else:
-            st.info("No co-location events detected within the configured time window.")
+            if not colocation_df.empty:
+                st.subheader(f"All Co-location Events (window: {colocation_window} min)")
+                st.dataframe(colocation_df.head(20), use_container_width=True, hide_index=True)
+            else:
+                st.info("No co-location events detected within the configured time window.")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
